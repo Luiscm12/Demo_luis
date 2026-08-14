@@ -29,11 +29,31 @@
             <li>Pasta </li>
             <li>Ensalada de verduras</li>
         </ul>
+        <button id="btn-mensaje">Ver oferta especial</button>
+        <p id="mensaje"></p>
+        <section>
+            <h2>Reserva tu Mesa</h2>
+            <form id="form-reservacion">
+                <label for="nombre">Nombre completo:</label>
+                <input type="text" id="nombre" name="nombre">
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email">
+
+                <label for="personas">Número de personas (1 - 20):</label>
+                <input type="number" id="personas" name="personas">
+
+                <button type="submit">Enviar reservación</button>
+            </form>
+
+            <!-- Mensaje de error o éxito -->
+            <p id="mensaje-form"></p>
+        </section>
     </main>
 
     <footer>
         <p>Luis Angel De La Cruz Méndez</p>
     </footer>
-
+    <script src="script.js"></script>
 </body>
-</html
+</html>

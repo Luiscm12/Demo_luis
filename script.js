@@ -1,4 +1,3 @@
-
 // Seleccionar el botón y el párrafo por su ID
 const boton = document.querySelector("#btn-mensaje");
 const mensaje = document.querySelector("#mensaje");

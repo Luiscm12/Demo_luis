@@ -6,7 +6,10 @@ const { Pool } = pg;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 app.use(express.static('public'));
+app.use(express.json()); 
+
 
 const pool = new Pool({
     host: process.env.DB_HOST,
@@ -15,6 +18,7 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 });
+
 
 app.get('/api/datos', async (req: Request, res: Response) => {
     try {
@@ -25,6 +29,24 @@ app.get('/api/datos', async (req: Request, res: Response) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+
+
+app.post('/api/reservaciones', async (req: Request, res: Response) => {
+    const { nombre, correo, personas } = req.body;
+    
+    try {
+       
+        const query = 'INSERT INTO reservaciones (nombre, correo, personas) VALUES ($1, $2, $3) RETURNING *';
+        const values = [nombre, correo, personas];
+        const result = await pool.query(query, values);
+        
+        res.status(201).json({ mensaje: 'Reservación guardada', registro: result.rows[0] });
+    } catch (error) {
+        console.error('Error al guardar reservación:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
 
 app.listen(Number(PORT), '0.0.0.0', () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);

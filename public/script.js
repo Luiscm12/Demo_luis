@@ -2,7 +2,7 @@ const boton = document.querySelector("#btn-mensaje");
 const mensaje = document.querySelector("#mensaje");
 
 boton.addEventListener("click", function() {
-    mensaje.textContent = "🎉 ¡Obtuviste un 10% de descuento en tu consumo!";
+    mensaje.textContent = " ¡Obtuviste un 10% de descuento en tu consumo!";
     mensaje.style.color = "#27ae60";
     mensaje.style.fontWeight = "bold";
 });
@@ -10,7 +10,8 @@ boton.addEventListener("click", function() {
 const formReservacion = document.querySelector("#form-reservacion");
 const mensajeForm = document.querySelector("#mensaje-form");
 
-formReservacion.addEventListener("submit", function(event) {
+
+formReservacion.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const nombre = document.querySelector("#nombre").value.trim();
@@ -36,8 +37,34 @@ formReservacion.addEventListener("submit", function(event) {
         return;
     }
 
-    mensajeForm.textContent = "Reservación realizada con éxito! Te esperamos.";
-    mensajeForm.style.color = "#27ae60";
+    
+    mensajeForm.textContent = "Enviando reservación...";
+    mensajeForm.style.color = "#f39c12"; 
 
-    formReservacion.reset();
+    try {
+        const datos = {
+            nombre: nombre,
+            correo: email, 
+            personas: numPersonas
+        };
+
+        const respuesta = await fetch('/api/reservaciones', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        });
+
+        if (respuesta.ok) {
+            mensajeForm.textContent = "¡Reservación guardada con éxito en la base de datos!";
+            mensajeForm.style.color = "#27ae60"; 
+            formReservacion.reset();
+        } else {
+            mensajeForm.textContent = "Hubo un error en el servidor. Intenta de nuevo.";
+            mensajeForm.style.color = "#e74c3c"; 
+        }
+    } catch (error) {
+        console.error("Error al enviar:", error);
+        mensajeForm.textContent = "No hay conexión con la base de datos.";
+        mensajeForm.style.color = "#e74c3c";
+    }
 });
